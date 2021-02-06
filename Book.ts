@@ -1,12 +1,10 @@
-function classDecorator(param1: string, param2: string) {
-  return function <T extends {new(...args: any[]): {}}> (constructor: T) {
-    return class extends constructor {
-      firstProperty = param1;
-      secondProperty = param2;
-    }
+function classDecorator<T extends { new (...args: any[]): {} }>(
+  constructor: T
+) {
+  return class extends constructor {
+    newProperty = 'new property'
   }
 }
-
 
 function logger(className: string) {
   /* implementing logic */
@@ -25,13 +23,18 @@ function prop(target: Object, name: string) {
   });
 }
 
+function getter(constructorF: Function) {
+  
+
+}
+
 @logger('Book')
 export class Book {
 
 }
 
 
-@classDecorator('first', 'second')
+@classDecorator
 export class Test {
 
 }
@@ -40,3 +43,26 @@ export class Person {
   @prop private name: string;
   @prop private age: number;
 }
+
+const oatmeal = {
+  viscosity: 20,
+  flavor: 'Brown Sugar Cinnamon',
+}
+
+console.log(Object.getOwnPropertyDescriptor(oatmeal, 'viscosity'));
+
+function readOnly(target, key, descriptor) {
+  return {
+    ...descriptor,
+    writable: false,
+  }
+}
+
+const obj = {
+  name: 'obj',
+  lengthOfName: 3
+};
+
+console.log(Object.getOwnPropertyDescriptor(obj, 'name'));
+console.log(Object.getOwnPropertyDescriptor(obj, 'lengthOfName'));
+
